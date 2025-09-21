@@ -1,0 +1,182 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tg-theme-bg-color: #ffffff !important;
+  --tg-theme-text-color: #000000 !important;
+  --tg-theme-hint-color: #666666 !important;
+  --tg-theme-link-color: #2481cc !important;
+  --tg-theme-button-color: #2481cc !important;
+  --tg-theme-button-text-color: #ffffff !important;
+  --tg-theme-secondary-bg-color: #ffffff !important;
+  --tg-theme-input-bg-color: #ffffff !important;
+  --tg-theme-input-text-color: #000000 !important;
+  --tg-theme-input-border-color: #d1d5db !important;
+  --tg-theme-input-focus-color: #2481cc !important;
+  --tg-theme-card-bg-color: #ffffff !important;
+  --tg-theme-border-color: #e5e7eb !important;
+  --tg-theme-shadow-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Force white backgrounds everywhere */
+html, body, #root, * {
+  background-color: #ffffff !important;
+}
+
+.bg-telegram-bg {
+  background-color: #ffffff !important;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--tg-theme-bg-color);
+  color: var(--tg-theme-text-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Enhanced input styling for better dark mode support */
+input, select, textarea {
+  background-color: var(--tg-theme-input-bg-color) !important;
+  color: var(--tg-theme-input-text-color) !important;
+  border-color: var(--tg-theme-input-border-color) !important;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--tg-theme-input-focus-color) !important;
+  box-shadow: 0 0 0 2px rgba(var(--tg-theme-input-focus-color), 0.1) !important;
+  outline: none !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--tg-theme-hint-color) !important;
+}
+
+/* Enhanced card styling */
+.card-enhanced {
+  background-color: var(--tg-theme-card-bg-color);
+  border: 1px solid var(--tg-theme-border-color);
+  box-shadow: 0 4px 6px var(--tg-theme-shadow-color);
+  transition: all 0.2s ease;
+}
+
+.card-enhanced:hover {
+  box-shadow: 0 8px 12px var(--tg-theme-shadow-color);
+  transform: translateY(-2px);
+}
+
+/* Enhanced button styling */
+.btn-primary {
+  background: linear-gradient(135deg, var(--tg-theme-button-color), #1c5a87);
+  color: var(--tg-theme-button-text-color);
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(var(--tg-theme-button-color), 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(var(--tg-theme-button-color), 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Enhanced input field height */
+.input-enhanced {
+  min-height: 3.5rem;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+}
+
+select.input-enhanced {
+  min-height: 3.5rem;
+  padding: 1rem;
+}
+
+textarea.input-enhanced {
+  min-height: 6rem;
+  padding: 1rem;
+  resize: vertical;
+}
+
+/* Grid layout utilities */
+.grid-ads {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .grid-ads {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Enhanced animations */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading animations */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Enhanced shadows and borders */
+.shadow-elegant {
+  box-shadow: 0 10px 25px var(--tg-theme-shadow-color);
+}
+
+.border-elegant {
+  border: 1px solid var(--tg-theme-border-color);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
