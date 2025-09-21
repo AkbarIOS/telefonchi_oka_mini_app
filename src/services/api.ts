@@ -7,7 +7,7 @@ class ApiService {
 
   constructor() {
     // TODO: Replace with your actual API base URL
-    this.baseURL = process.env.REACT_APP_API_URL || 'https://telefonchi-backend-working.loca.lt/api';
+    this.baseURL = process.env.REACT_APP_API_URL || 'https://telefonchiokabot-production.up.railway.app/api';
 
     this.api = axios.create({
       baseURL: this.baseURL,
