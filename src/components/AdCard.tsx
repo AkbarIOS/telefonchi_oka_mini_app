@@ -23,6 +23,32 @@ const AdCard: React.FC<AdCardProps> = ({
     }
   };
 
+  const getImageUrl = (photoPath: string | null | undefined): string | null => {
+    if (!photoPath) return null;
+
+    // If already a full URL, return as is
+    if (photoPath.startsWith('http')) {
+      return photoPath;
+    }
+
+    // If it's a relative path, convert to full URL using the API base
+    const baseURL = 'https://telefonchiokabot-production.up.railway.app';
+
+    // Handle different path formats
+    if (photoPath.startsWith('/static/uploads/')) {
+      // Extract filename and use proxy endpoint
+      const filename = photoPath.split('/').pop();
+      return `${baseURL}/api/proxy/image/${filename}`;
+    } else if (photoPath.startsWith('/app/uploads/')) {
+      // Extract filename and use proxy endpoint
+      const filename = photoPath.split('/').pop();
+      return `${baseURL}/api/proxy/image/${filename}`;
+    } else {
+      // Assume it's just a filename
+      return `${baseURL}/api/proxy/image/${photoPath}`;
+    }
+  };
+
   const getStatusText = (status: string): string => {
     const statusTexts: Record<string, Record<string, string>> = {
       'pending': { 'ru': 'На модерации', 'uz': 'Moderatsiyada' },
@@ -51,49 +77,54 @@ const AdCard: React.FC<AdCardProps> = ({
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
       <div className="w-full h-48 bg-gray-200 overflow-hidden flex items-center justify-center">
-        {ad.photo_path ? (
-          <img
-            src={ad.photo_path}
-            alt={ad.model}
-            className="w-full h-full object-cover"
-            crossOrigin="anonymous"
-            referrerPolicy="no-referrer"
-            onLoad={() => {
-              console.log('✅ Image loaded successfully:', ad.photo_path);
-              console.log('🌐 Current URL:', window.location.href);
-              console.log('📱 User agent:', navigator.userAgent);
-              console.log('🔒 Is secure context:', window.isSecureContext);
-            }}
-            onError={(e) => {
-              console.error('❌ Image failed to load:', ad.photo_path);
-              console.error('🌐 Current URL:', window.location.href);
-              console.error('📱 User agent:', navigator.userAgent);
-              console.error('🔒 Is secure context:', window.isSecureContext);
-              console.error('Error event:', e);
-              console.error('Network state:', navigator.onLine ? 'online' : 'offline');
+        {(() => {
+          const imageUrl = getImageUrl(ad.photo_path);
+          return imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={ad.model}
+              className="w-full h-full object-cover"
+              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
+              onLoad={() => {
+                console.log('✅ Image loaded successfully:', imageUrl);
+                console.log('🔍 Original path:', ad.photo_path);
+                console.log('🌐 Current URL:', window.location.href);
+                console.log('📱 User agent:', navigator.userAgent);
+                console.log('🔒 Is secure context:', window.isSecureContext);
+              }}
+              onError={(e) => {
+                console.error('❌ Image failed to load:', imageUrl);
+                console.error('🔍 Original path:', ad.photo_path);
+                console.error('🌐 Current URL:', window.location.href);
+                console.error('📱 User agent:', navigator.userAgent);
+                console.error('🔒 Is secure context:', window.isSecureContext);
+                console.error('Error event:', e);
+                console.error('Network state:', navigator.onLine ? 'online' : 'offline');
 
-              // Try to fetch the image directly to get more error info
-              if (ad.photo_path) {
-                fetch(ad.photo_path)
-                  .then(response => {
-                    console.error('❌ Fetch test result:', response.status, response.statusText);
-                    console.error('❌ Response headers:', Array.from(response.headers.entries()));
-                  })
-                  .catch(fetchError => {
-                    console.error('❌ Fetch test failed:', fetchError);
-                  });
-              }
+                // Try to fetch the image directly to get more error info
+                if (imageUrl) {
+                  fetch(imageUrl)
+                    .then(response => {
+                      console.error('❌ Fetch test result:', response.status, response.statusText);
+                      console.error('❌ Response headers:', Array.from(response.headers.entries()));
+                    })
+                    .catch(fetchError => {
+                      console.error('❌ Fetch test failed:', fetchError);
+                    });
+                }
 
-              const target = e.target as HTMLImageElement;
-              target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI4MCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxyZWN0IHg9IjEwNSIgeT0iNzAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI2MCIgcng9IjQiIGZpbGw9IiM5Q0EzQUYiLz4KPGNpcmNsZSBjeD0iMTIwIiBjeT0iODUiIHI9IjgiIGZpbGw9IiNGM0Y0RjYiLz4KPC9zdmc+';
-            }}
-          />
-        ) : (
-          <div className="text-gray-400 text-center">
-            <div className="text-4xl mb-2">□</div>
-            <div className="text-sm">No Photo</div>
-          </div>
-        )}
+                const target = e.target as HTMLImageElement;
+                target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjgwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI4MCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyODAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxyZWN0IHg9IjEwNSIgeT0iNzAiIHdpZHRoPSI3MCIgaGVpZ2h0PSI2MCIgcng9IjQiIGZpbGw9IiM5Q0EzQUYiLz4KPGNpcmNsZSBjeD0iMTIwIiBjeT0iODUiIHI9IjgiIGZpbGw9IiNGM0Y0RjYiLz4KPC9zdmc+';
+              }}
+            />
+          ) : (
+            <div className="text-gray-400 text-center">
+              <div className="text-4xl mb-2">□</div>
+              <div className="text-sm">No Photo</div>
+            </div>
+          );
+        })()}
       </div>
 
       <div className="p-4">
